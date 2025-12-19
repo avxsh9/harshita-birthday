@@ -70,17 +70,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapper = document.createElement('div');
         wrapper.className = 'scrolling-grid-wrapper';
 
-        // Helper to create a single track
+        // Fisher-Yates Shuffle
+        const shuffleArray = (array) => {
+            const newArr = [...array];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        };
+
+        // Helper to create a single track with randomized images
         const createTrack = () => {
             const track = document.createElement('div');
             track.className = 'scrolling-grid-track';
+
+            // Shuffle images for THIS track
+            const shuffledImages = shuffleArray(marqueeImages);
+
             // Duplicate content 4 times for seamless scrolling
-            let imagesHTML = marqueeImages.map(src => `<img src="${src}" alt="Memory" loading="lazy">`).join('');
+            let imagesHTML = shuffledImages.map(src => `<img src="${src}" alt="Memory" loading="lazy">`).join('');
             track.innerHTML = imagesHTML + imagesHTML + imagesHTML + imagesHTML;
             return track;
         };
 
-        // Create 3 rows to fill the screen (approx 350px each covering 100vh)
+        // Create 3 rows to fill the screen
         wrapper.appendChild(createTrack());
         wrapper.appendChild(createTrack());
         wrapper.appendChild(createTrack());

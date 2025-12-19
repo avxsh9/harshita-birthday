@@ -678,17 +678,18 @@
         }
 
         .scrolling-grid-track img {
-            height: 350px;
-            /* "Bdi bdi" - Large images */
+            height: 450px;
+            /* "Bdi bdi" - Larger images */
             width: auto;
-            max-width: 500px;
-            /* Prevent wide panoramas from taking too much */
-            object-fit: cover;
+            /* Allow natural width */
+            max-width: none;
+            /* Remove constraint to prevent cropping */
+            object-fit: contain;
+            /* Ensure full image is visible */
             border-radius: 12px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
             transition: transform 0.4s ease;
             filter: grayscale(20%);
-            /* Slight professional filter? */
         }
 
         .scrolling-grid-track img:hover {
@@ -810,40 +811,121 @@
         */
         @media (max-width: 768px) {
 
-            /* Hero Grid Scaling */
-            .scrolling-grid-track img {
-                height: 180px;
-                /* Smaller for mobile */
-                border-radius: 8px;
+            /* Container */
+            .container {
+                width: 90%;
             }
 
-            .scrolling-grid-track {
-                gap: 15px;
-                margin-bottom: 15px;
+            /* Hero Section */
+            .hero-title {
+                font-size: 2.8rem;
+                line-height: 1.2;
             }
 
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+
+            .hero-content {
+                padding: 40px 20px;
+                width: 95%;
+            }
+
+            /* Note Card - Remove overlap to fix clash */
+            .note-card {
+                margin: 30px auto 0;
+                padding: 40px 20px;
+                width: 100%;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            /* Timeline / Memories - Switch to Left-Aligned Listing */
+            .timeline {
+                margin: 40px auto 0;
+            }
+
+            .timeline::after {
+                left: 20px;
+                /* Line moves to far left */
+            }
+
+            .memory-item {
+                width: 100%;
+                padding-left: 50px;
+                /* Space for line */
+                padding-right: 0;
+                margin-bottom: 50px;
+            }
+
+            /* Reset nth-child logic for pure vertical stack */
+            .memory-item:nth-child(even),
             .memory-item:nth-child(odd) {
-                flex-direction: row-reverse;
-                text-align: right;
+                left: 0;
+                text-align: left;
+                align-items: flex-start;
             }
 
-            .memory-item:nth-child(odd) .memory-content {
-                margin-right: 0;
-                margin-left: 50px;
+            .memory-item::after {
+                left: 12px !important;
+                /* Dot on the line */
+                right: auto;
             }
 
             .memory-date {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                margin-bottom: 10px;
+                display: inline-block;
                 background: var(--accent-gold);
                 color: #fff;
-                padding: 5px 15px;
-                border-radius: 20px;
-                font-weight: bold;
-                z-index: 2;
-                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+                padding: 4px 12px;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                box-shadow: none;
+            }
+
+            .memory-content {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            /* Gallery & Grids */
+            .gallery-grid,
+            .cinematic-grid,
+            .love-grid {
+                grid-template-columns: 1fr;
+                /* Single column on mobile */
+                gap: 20px;
+            }
+
+            .cinematic-grid {
+                grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+                /* 2 columns for videos potentially, or 1 if too small */
+            }
+
+            @media (max-width: 480px) {
+                .cinematic-grid {
+                    grid-template-columns: 1fr;
+                    /* Full width videos on very small screens */
+                }
+            }
+
+            /* Scrolling Marquee - Mobile "Bdi Bdi" */
+            .scrolling-grid-track img {
+                height: 280px;
+                /* Much larger for mobile visibility */
+                max-width: none;
+                /* Allow full width */
+            }
+
+            .scrolling-grid-track {
+                gap: 20px;
             }
         }
 
@@ -915,7 +997,6 @@
 
         .container {
             width: 95%;
-        }
         }
     </style>
 </head>
