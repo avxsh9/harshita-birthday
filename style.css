@@ -804,3 +804,103 @@ footer {
 .container {
     width: 95%;
 }
+
+/* MUSIC MODAL */
+.music-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.music-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.music-modal-content {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius-medium);
+    text-align: center;
+    max-width: 90%;
+    width: 350px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.music-modal-overlay.show .music-modal-content {
+    transform: scale(1);
+}
+
+.music-modal-content p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: var(--text-color);
+}
+
+.music-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.music-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-family: var(--font-sans);
+}
+
+.music-btn:hover {
+    transform: scale(1.05);
+}
+
+.music-btn.yes {
+    background: var(--accent-gold);
+    color: var(--white);
+}
+
+.music-btn.no {
+    background: #eee;
+    color: #666;
+}
+
+/* VISUAL ENHANCEMENTS */
+.mouse-sparkle {
+    position: absolute;
+    background: radial-gradient(circle, #fff 0%, rgba(255, 215, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.4);
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+/* Ensure 3D context for tilt elements */
+.gallery-item,
+.memory-content,
+.note-card,
+.love-item {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* Enhance Note Text readability during animation */
+.note-text span {
+    will-change: opacity, transform;
+}

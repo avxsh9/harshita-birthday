@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (surpriseBtn && hiddenMessage) {
         surpriseBtn.addEventListener('click', () => {
             hiddenMessage.classList.add('revealed');
-            surpriseBtn.textContent = "Glad to see that smile :)";
+            surpriseBtn.textContent = "Happy Birthday";
             surpriseBtn.style.pointerEvents = "none";
             surpriseBtn.style.borderColor = "transparent";
             surpriseBtn.style.backgroundColor = "var(--accent-pink)";
@@ -192,16 +192,36 @@ document.addEventListener('DOMContentLoaded', () => {
         isPlaying = !isPlaying;
     });
 
-    // Try auto-play
-    document.body.addEventListener('click', () => {
-        if (!isPlaying) {
+    // Music Consent Logic
+    const musicModal = document.getElementById('musicModal');
+    const musicYesBtn = document.getElementById('musicYes');
+    const musicNoBtn = document.getElementById('musicNo');
+
+    // Show modal on load
+    setTimeout(() => {
+        if (musicModal) musicModal.classList.add('show');
+    }, 1000);
+
+    if (musicYesBtn) {
+        musicYesBtn.addEventListener('click', () => {
             audio.play().then(() => {
                 isPlaying = true;
                 musicBtn.classList.add('playing');
                 musicBtn.innerHTML = '<span class="music-icon">🎵</span>';
-            }).catch(() => { });
-        }
-    }, { once: true });
+                musicBtn.title = "Pause Music";
+            }).catch(console.error);
+            if (musicModal) musicModal.classList.remove('show');
+            setTimeout(() => { if (musicModal) musicModal.style.display = 'none'; }, 500);
+        });
+    }
+
+    if (musicNoBtn) {
+        musicNoBtn.addEventListener('click', () => {
+            // Do not play logic
+            if (musicModal) musicModal.classList.remove('show');
+            setTimeout(() => { if (musicModal) musicModal.style.display = 'none'; }, 500);
+        });
+    }
 
 
     /* 
@@ -212,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFloatingHeart() {
         const heart = document.createElement('div');
         heart.className = 'heart';
-        heart.innerHTML = '❤️'; // Or use other emojis like 💖, 🌸
+        heart.innerHTML = '❤️'; // Neutral sparkle
 
         // Randomize position and animation properties
         const startLeft = Math.random() * 100; // 0 to 100vw
@@ -288,17 +308,54 @@ document.addEventListener('DOMContentLoaded', () => {
             if (vaultContent) {
                 vaultContent.style.display = 'block';
 
-                // Add Single Play Logic
-                const vaultVideos = document.querySelectorAll('.vault-video');
-                vaultVideos.forEach(video => {
-                    video.addEventListener('play', () => {
-                        vaultVideos.forEach(otherVideo => {
-                            if (otherVideo !== video) {
-                                otherVideo.pause();
-                            }
+                // Dynamic Video Injection
+                const vaultGrid = document.getElementById('vaultGrid');
+                if (vaultGrid && vaultGrid.children.length === 0) { // Only inject if empty
+                    const secretVideos = [
+                        "Avinash.mp4",
+                        "edits/1.mp4",
+                        "edits/2.mp4",
+                        "edits/3.mp4",
+                        "edits/4.mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.14.mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.15.mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.16 (1).mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.16.mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.17 (1).mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.17.mp4",
+                        "edits/WhatsApp Video 2025-12-19 at 20.42.18.mp4"
+                    ];
+
+                    secretVideos.forEach(src => {
+                        const card = document.createElement('div');
+                        card.className = 'edit-card';
+
+                        const video = document.createElement('video');
+                        video.className = 'vault-video';
+                        video.controls = true;
+                        video.preload = 'metadata';
+
+                        const source = document.createElement('source');
+                        source.src = src;
+                        source.type = 'video/mp4';
+
+                        video.appendChild(source);
+                        card.appendChild(video);
+                        vaultGrid.appendChild(card);
+                    });
+
+                    // Add Single Play Logic to newly created videos
+                    const vaultVideos = document.querySelectorAll('.vault-video');
+                    vaultVideos.forEach(video => {
+                        video.addEventListener('play', () => {
+                            vaultVideos.forEach(otherVideo => {
+                                if (otherVideo !== video) {
+                                    otherVideo.pause();
+                                }
+                            });
                         });
                     });
-                });
+                }
             }
         } else {
             // Error
